@@ -17,9 +17,9 @@ collectors:
         memory: 1024Mi
         cpu: 1
     service:
-      loadBalancerIP: 172.16.19.64
+      loadBalancerIP: 10.18.8.173
       annotations:
-        metallb.universe.tf/address-pool: load-balanced
+        metallb.universe.tf/address-pool: jalapeno
 
   telegrafIngress:
     name: telegraf-ingress
@@ -27,6 +27,8 @@ collectors:
     image: telegraf:1.15-alpine
     imagePullSecret: regcred
     port: 32400
+    config: 
+      telegrafContainerPort: 7788
     # resources:
     #   requests:
     #     memory:
@@ -35,9 +37,9 @@ collectors:
     #     memory:
     #     cpu:
     service:
-      loadBalancerIP: 172.16.19.65
+      loadBalancerIP: 10.18.8.174
       annotations:
-        metallb.universe.tf/address-pool: load-balanced
+        metallb.universe.tf/address-pool: jalapeno
 
 processors:
   lslinknodeEdge:
@@ -56,6 +58,8 @@ processors:
     replicas: 1
     image: telegraf:1.15-alpine
     imagePullSecret: regcred
+    config: 
+      telegrafContainerPort: 7788
     # resources:
     #   requests:
     #     memory:
@@ -87,7 +91,7 @@ arangodb:
     #     http: 30852
   ingress:
     enabled: true
-    hostname: arango.dev.network.garden
+    hostname: arangodb
   auth:
     admin:
       username: root
@@ -156,10 +160,10 @@ grafana:
       grafana: 3000
   ingress:
     enabled: true
-    hostname: grafana.dev.network.garden
+    hostname: grafana
     tls:
       - hosts:
-        - grafana.dev.network.garden
+        - grafana
         secretName: ingress-certificate-secret-prod
 
 # https://github.com/bitnami/charts/tree/master/bitnami/kafka
@@ -169,6 +173,13 @@ kafka:
     repository: bitnami/kafka
     tag: 2.8.0-debian-10-r57
   replicacount: 1
+  # externalAccess:
+  #   enabled: true
+  #   service:
+  #     loadBalancerIPs:
+  #     - 10.18.8.175
+  #   autoDiscovery:
+  #     enabled: true
   # service:
   #   type: NodePort
   # externalAccess:

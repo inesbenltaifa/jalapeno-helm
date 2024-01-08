@@ -22,6 +22,11 @@ data:
       max_message_len = 1000000
       data_format = "influx"
 
+    [[inputs.http_listener_v2]]
+      service_address = ":7788"
+      path = "/health"
+      methods = ["GET"]
+
     [[outputs.influxdb]]
       urls = ["http://{{ .Values.influxdb.fullnameOverride }}.{{ .Release.Namespace }}:8086"]
       database = "{{ (index .Values.influxdb.influxdb.extraEnvVars 0).value }}"

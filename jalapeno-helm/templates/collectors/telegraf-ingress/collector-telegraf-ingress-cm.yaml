@@ -22,6 +22,11 @@ data:
       embedded_tags = ["Cisco-IOS-XR-fib-common-oper:mpls-forwarding/nodes/node/label-fib/forwarding-details/forwarding-detail/label-information/outgoing-interface"]
       [inputs.cisco_telemetry_mdt.aliases]
         ifstats = "ietf-interfaces:interfaces-state/interface/statistics"
+       
+    [[inputs.http_listener_v2]]
+      service_address = ":7788"
+      path = "/health"
+      methods = ["GET"]
 
     [[outputs.kafka]]
       brokers = ["{{ .Values.kafka.fullnameOverride }}.{{ .Release.Namespace }}.svc:9092"]

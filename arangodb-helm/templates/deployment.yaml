@@ -81,6 +81,25 @@ spec:
             - name: http
               containerPort: {{ .Values.arangodb.containerPorts.http }}
               protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - |
+                if command -v curl &> /dev/null ; then
+                    :
+                else
+                    apk update
+                    apk upgrade
+                    apk add curl
+                fi
+                curl --fail -kv http://localhost:8529/_admin/server/availability -u "root:$ARANGO_ROOT_PASSWORD"
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 25
+            successThreshold: 1
+            timeoutSeconds: 5
           {{- if .Values.arangodb.resources }}
           resources: {{- toYaml .Values.arangodb.resources | nindent 12 }}
           {{- end }}
