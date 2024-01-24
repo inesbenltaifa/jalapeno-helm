@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.arangodb.name }}
+  namespace: jalapeno
+  labels: 
+    app.kubernetes.io/instance: jalapeno
+    app.kubernetes.io/name: {{ .Values.arangodb.name }}
+spec:
+  ingressClassName: {{ .Values.arangodb.name }}
+  rules:
+    - host: {{ .Values.arangodb.name }}
+      http:
+        paths:
+          - path: "/" 
+            pathType: ImplementationSpecific
+            backend:
+              service:
+                name: {{ .Values.arangodb.name }}
+                port:
+                  name: http
+

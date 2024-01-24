@@ -32,7 +32,7 @@ spec:
             - --database-server
             #- "http://arangodb.{{ .Release.Namespace }}:8529"
             #- "http://{{ .Values.arangodb.ingress.hostname }}:80"
-            - "http://jalapeno-arangodb:8086" # TODO Fix hardcoded value
+            - "http://{{ .Values.arangodb.name }}:8086" # TODO Fix hardcoded value #Done
             - --database-name
             - "{{ .Values.arangodb.databaseName }}"
             - --notify-event

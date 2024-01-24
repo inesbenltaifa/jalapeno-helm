@@ -1,0 +1,44 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Values.grafana.name }}
+  namespace: jalapeno
+  labels: 
+    app.kubernetes.io/component: {{ .Values.grafana.name }}
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: local-path
+
+---
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: {{ .Values.grafana.name }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  capacity:
+    storage: 8Gi
+  claimRef:
+    apiVersion: v1
+    kind: PersistentVolumeClaim
+    name: {{ .Values.grafana.name }}
+    namespace: jalapeno
+  local:
+    path: /var/local-path-provisioner/
+  nodeAffinity:
+    required:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: kubernetes.io/hostname
+          operator: In
+          values:
+          - k8s-il-a
+  persistentVolumeReclaimPolicy: Delete
+  storageClassName: local-path
+  volumeMode: Filesystem
+

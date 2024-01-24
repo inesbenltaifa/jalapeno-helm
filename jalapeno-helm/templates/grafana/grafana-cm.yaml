@@ -1,0 +1,35 @@
+apiVersion: v1
+data:
+  GF_AUTH_LDAP_ALLOW_SIGN_UP: "false"
+  GF_AUTH_LDAP_CONFIG_FILE: /opt/bitnami/grafana/conf/ldap.toml
+  GF_AUTH_LDAP_ENABLED: "false"
+  GF_INSTALL_PLUGINS: ""
+  GF_PATHS_CONFIG: /opt/bitnami/grafana/conf/grafana.ini
+  GF_PATHS_DATA: /opt/bitnami/grafana/data
+  GF_PATHS_LOGS: /opt/bitnami/grafana/logs
+  GF_PATHS_PLUGINS: /opt/bitnami/grafana/data/plugins
+  GF_PATHS_PROVISIONING: /opt/bitnami/grafana/conf/provisioning
+  GF_SECURITY_ADMIN_USER: root
+  prometheus.yaml: |-
+    {
+        "apiVersion": 1,
+        "datasources": [
+            {
+               "access":"proxy",
+                "editable": true,
+                "name": "prometheus", 
+                "orgId": 1,
+                "type": "prometheus",
+                "url": "http://prometheus-service.monitoring.svc:8080",
+                "version": 1
+            }
+        ]
+    }
+kind: ConfigMap
+metadata:
+  labels:
+    app.kubernetes.io/component: {{ .Values.grafana.name }}
+    app.kubernetes.io/instance: jalapeno
+    app.kubernetes.io/name: {{ .Values.grafana.name }}
+  name: {{ .Values.grafana.name }}-envvars
+  namespace: jalapeno

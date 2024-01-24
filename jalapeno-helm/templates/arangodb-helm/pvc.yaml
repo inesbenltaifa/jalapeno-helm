@@ -1,0 +1,37 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Values.arangodb.name }}-data
+  namespace: jalapeno
+  labels: 
+    app.kubernetes.io/component: {{ .Values.arangodb.name }}
+    app.kubernetes.io/instance: jalapeno
+    app.kubernetes.io/name: {{ .Values.arangodb.name }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 50Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ .Values.arangodb.name }}-appdata
+  namespace: jalapeno
+  labels: 
+    app.kubernetes.io/component: {{ .Values.arangodb.name }}
+    app.kubernetes.io/instance: jalapeno
+    app.kubernetes.io/name: {{ .Values.arangodb.name }}
+spec:
+  accessModes:
+  - ReadWriteOnce
+  resources:
+    requests:
+      storage: 30Gi
+  storageClassName: local-path
+  volumeMode: Filesystem
+  

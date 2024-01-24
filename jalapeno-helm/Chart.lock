@@ -5,8 +5,5 @@ dependencies:
 - name: kafka
   repository: https://charts.bitnami.com/bitnami/
   version: 14.0.1
-- name: grafana
-  repository: https://charts.bitnami.com/bitnami/
-  version: 6.1.7
 digest: sha256:6df3780f2f21d3c516869ce6406ce6311bb243710e42d8d3fdbddc855ed364e7
 generated: "2021-08-06T08:59:58.073513796+02:00"

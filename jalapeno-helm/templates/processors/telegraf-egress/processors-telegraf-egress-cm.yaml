@@ -36,7 +36,7 @@ data:
       timeout = "5s"
 
     [[outputs.file]]
-      files = ["metrics.out"]
+      files = ["/tmp/metrics.out"]
       rotation_interval = "1h"
       rotation_max_size = "20MB"
       rotation_max_archives = 3

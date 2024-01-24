@@ -31,7 +31,7 @@ spec:
             - "{{ .Values.kafka.fullnameOverride }}.{{ .Release.Namespace }}:9092"
             - --database-server
             #- "http://arangodb.{{ .Release.Namespace }}:8529"
-            - "http://jalapeno-arangodb:8086" # TODO Fix hardcoded value
+            - "http://{{ .Values.arangodb.name }}:8086" # TODO Fix hardcoded value : Done 
             - --database-name
             - "{{ .Values.arangodb.databaseName }}"
           {{- if .Values.collectors.gobmp.resources }}

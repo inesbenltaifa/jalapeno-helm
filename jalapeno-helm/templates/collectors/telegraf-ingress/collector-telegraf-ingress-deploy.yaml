@@ -20,11 +20,11 @@ spec:
             failureThreshold: 3
             httpGet:
               path: /health
-              port: {{ .Values.processors.telegrafIngress.config.telegrafContainerPort }}
+              port: {{ .Values.collectors.telegrafIngress.telegrafContainerPort }}
               scheme: HTTP
             periodSeconds: 15
             successThreshold: 1
-            timeoutSeconds: 1
+            timeoutSeconds: 5
           image: "{{ .Values.collectors.telegrafIngress.image }}"
           volumeMounts:
             - mountPath: /etc/telegraf/telegraf.conf
@@ -60,8 +60,8 @@ spec:
               memory: "1024Mi"
               cpu: "1"
           {{- end }}
-      imagePullSecrets:
-        - name: "{{ .Values.collectors.telegrafIngress.imagePullSecret }}"
+      # imagePullSecrets:
+      #   - name: "{{ .Values.collectors.telegrafIngress.imagePullSecret }}" # Image comes from public repo. No need of regcred unless it comes from private repo
       volumes:
         - name: telegraf-ingress-config
           configMap:

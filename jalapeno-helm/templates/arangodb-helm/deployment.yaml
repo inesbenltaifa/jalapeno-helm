@@ -1,0 +1,93 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.arangodb.name }}
+  namespace: jalapeno
+  labels: 
+    app.kubernetes.io/component: {{ .Values.arangodb.name }}
+    app.kubernetes.io/instance: jalapeno
+    app.kubernetes.io/name: {{ .Values.arangodb.name }}
+spec:
+  replicas: 1
+  strategy:
+    rollingUpdate:
+      maxSurge: 25%
+      maxUnavailable: 25%
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/component: {{ .Values.arangodb.name }}
+      app.kubernetes.io/instance: jalapeno
+      app.kubernetes.io/name: {{ .Values.arangodb.name }}
+  template:
+    metadata:
+      labels: 
+        app.kubernetes.io/component: {{ .Values.arangodb.name }}
+        app.kubernetes.io/instance: jalapeno
+        app.kubernetes.io/name: {{ .Values.arangodb.name }}
+        
+    spec:
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app.kubernetes.io/component: {{ .Values.arangodb.name }}
+                  app.kubernetes.io/instance: jalapeno
+                  app.kubernetes.io/name: {{ .Values.arangodb.name }}
+              namespaces:
+              - jalapeno
+              topologyKey: kubernetes.io/hostname
+            weight: 1
+      containers:
+        - name: {{ .Values.arangodb.name }}
+          image: "{{ .Values.arangodb.image.repository }}:{{ .Values.arangodb.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: ARANGO_ROOT_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ .Values.arangodb.name }}-secret
+                  key: root-user-password
+          ports:
+            - name: http
+              containerPort: {{ .Values.arangodb.port }}
+              protocol: TCP
+          readinessProbe:
+            exec:
+              command:
+              - sh
+              - -c
+              - |
+                if command -v curl &> /dev/null ; then
+                    :
+                else
+                    apk update
+                    apk upgrade
+                    apk add curl
+                fi
+                curl --fail -kv http://localhost:8529/_admin/server/availability -u "root:$ARANGO_ROOT_PASSWORD"
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 25
+            successThreshold: 1
+            timeoutSeconds: 5
+          {{- if .Values.arangodb.resources }}
+          resources: {}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/arangodb3
+            - name: appdata
+              mountPath: /var/lib/arangodb3-apps
+      volumes:
+        - name: arangodb-credentials
+          secret:
+            secretName: {{ .Values.arangodb.name }}-secret
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ .Values.arangodb.name }}-data
+        - name: appdata
+          persistentVolumeClaim:
+            claimName: {{ .Values.arangodb.name }}-appdata

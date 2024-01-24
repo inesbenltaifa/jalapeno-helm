@@ -24,11 +24,10 @@ collectors:
   telegrafIngress:
     name: telegraf-ingress
     replicas: 1
-    image: telegraf:1.15-alpine
-    imagePullSecret: regcred
+    image: telegraf:1.29.2-alpine
+    # imagePullSecret: regcred
     port: 32400
-    config: 
-      telegrafContainerPort: 7788
+    telegrafContainerPort: 7788
     # resources:
     #   requests:
     #     memory:
@@ -56,10 +55,9 @@ processors:
   telegrafEgress:
     name: telegraf-egress
     replicas: 1
-    image: telegraf:1.15-alpine
-    imagePullSecret: regcred
-    config: 
-      telegrafContainerPort: 7788
+    image: telegraf:1.29.2-alpine
+    # imagePullSecret: regcred
+    telegrafContainerPort: 7788
     # resources:
     #   requests:
     #     memory:
@@ -80,15 +78,16 @@ processors:
     #     cpu:
 
 arangodb:
+  name: arangodb
+  port: 8529
+  resources: []
   image:
     registry: docker.io
     repository: arangodb
     tag: 3.6.12
-  arangodb:
-    service:
-      type: ClusterIP
-    #   nodePorts:
-    #     http: 30852
+  service:
+    type: NodePort
+    nodePort: 32500
   ingress:
     enabled: true
     hostname: arangodb
@@ -143,21 +142,22 @@ influxdb:
 
 # https://github.com/bitnami/charts/tree/master/bitnami/grafana
 grafana:
-  fullnameOverride: grafana
+  name: grafana
   image:
     repository: bitnami/grafana
-    tag: 8.0.6-debian-10-r0
+    tag: 10.2.3-debian-11-r1
   admin:
     user: root
     password: jalapeno
-  replicaCount: 1
-  # service:
-  #   type: NodePort
-  #   nodePort: 30300
+  replicas: 1
   service:
-    type: ClusterIP
-    ports:
-      grafana: 3000
+    type: NodePort
+    nodePort: 32100
+    port: 3000
+  # service:
+  #   type: ClusterIP
+  #   ports:
+  #     grafana: 3000
   ingress:
     enabled: true
     hostname: grafana
@@ -171,7 +171,7 @@ kafka:
   fullnameOverride: kafka
   image:
     repository: bitnami/kafka
-    tag: 2.8.0-debian-10-r57
+    tag: 3.6.1-debian-11-r1
   replicacount: 1
   # externalAccess:
   #   enabled: true
@@ -188,3 +188,29 @@ kafka:
   #     type: NodePort
   #     nodePorts:
   #       - 30092
+
+
+prometheus:
+  name: prometheus-server
+  replicas: 1
+  image: 
+    repository: prom/prometheus
+    pullPolicy: Always
+  resources: []
+  config:
+    appServerPort: 9090
+    service:
+      type: NodePort
+      nodePort: 32200
+
+metrics:
+  name: kube-state-metrics-prometheus
+  replicas: 1
+  image: 
+    repository: k8s.gcr.io/kube-state-metrics/kube-state-metrics
+    pullPolicy: Always
+    tag: v2.3.0
+  resources: []
+  config:
+    telemetryPort: 8081
+    httpMetricPort: 8080

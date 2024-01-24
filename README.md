@@ -15,7 +15,8 @@ In order to use the Helm chart as is, a Kubernetes load balancer is needed.
 
 ## Installation
 1. Create namespace "jalapeno" on cluster
-2. Install using files locally ``helm install jalapeno ./jalapeno-helm -n jalapeno``
+2. Create namespace "monitoring" on cluster
+3. Install using files locally ``helm install jalapeno ./jalapeno-helm -n jalapeno``
 
 ## Changes to ArangoDB
 If the arangoDB gets changed the ArangoDB Chart has to be rebuild and copied into the charts folder of the Jalapeno Chart.
