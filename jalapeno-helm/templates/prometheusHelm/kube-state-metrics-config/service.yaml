@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app.kubernetes.io/component: exporter
+    app.kubernetes.io/name: {{ .Values.metrics.name }}
+    app.kubernetes.io/version: 2.3.0
+  name: {{ .Values.metrics.name }}
+  namespace: kube-system
+spec:
+  clusterIP: None
+  ports:
+  - name: http-metrics
+    port: {{ .Values.metrics.config.httpMetricPort }}
+    targetPort: http-metrics
+  - name: telemetry
+    port: {{ .Values.metrics.config.telemetryPort }}
+    targetPort: telemetry
+  selector:
+    app.kubernetes.io/name: {{ .Values.metrics.name }}
