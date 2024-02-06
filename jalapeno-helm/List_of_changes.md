@@ -8,7 +8,7 @@ Prometheus monitoring was created. You can find the source code here :  https://
 The templates were created by modifying the source code. 
 A folder named prometheusHelm was created in  jalapeno-helm/jalepeno-helm/ where you can find prometheus templates but also Kube state metrics service that will provide many metrics which is not available by default.  Kube state metrics allow to monitor all your kubernetes API objects like deployments, pods, jobs, cronjobs... : https://devopscube.com/setup-kube-state-metrics/ . 
 
-Prometheus services are running on monitoring namespace 
+Prometheus services are running on monitoring namespace, 
 Kube state metrics are running on kube-system namespace 
 This was the inital configuration, did not change it because of some problems with grafana. 
 
@@ -114,12 +114,12 @@ The image was updated by a new version
 
 ## TO DO 
 
-List of storage fro grafana 
-Influx as a data source aytomotocs with prometheus 
-Modify version of helm chart and image (see for arrango , kafka , redis , influx, redis )
+- List of storage for grafana 
+- Influx as a data source atomatically with prometheus 
+- Modify version of helm chart and image (see for arrango , kafka , redis , influx )
 
 ## NOT DONE 
 
-Since some image came from jalapeno repository i did not change the image and did not add a health endpoint for example for gobmp, topology , lslinknode.
+Since some images came from jalapeno repository i did not change the images and did not add a health endpoint for example for gobmp, topology , lslinknode.
 Influxdb, kafka and zookeeper had already a health endpoint but maybe the helm chart version can be updated.
 
