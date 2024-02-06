@@ -34,12 +34,12 @@ You can show it as tables or graph :
 
 ![graph](screenshots/image-5.png)
 
-You also can do some alerting if needed. 
+You can also do some alerting if needed. 
 
 
 ## Grafana 
 
-Grafana templates were created to link it to prometheus based on the existing helm chart, to add the link to prometheus I used this documentation: https://devopscube.com/setup-grafana-kubernetes/, the changes were made on /jalapeno-helm/templates/grafana/grafana-cm and /jalapeno-helm/templates/grafana/grafana-deploy.
+Grafana templates were created to link it to prometheus based on the existing helm chart, to add the link to prometheus I used this documentation: https://devopscube.com/setup-grafana-kubernetes/, the changes were made on /jalapeno-helm/templates/grafana/grafana-cm and /jalapeno-helm/templates/grafana/grafana-deploy files.
 The image was updated to a new version, so the Web UI is a new version also but still look like the old one. 
 
 You can access the web UI : 
@@ -52,18 +52,18 @@ you should arrive on this :
 
 Here the list of expression i used to build the graphs on grafana but first i verified them on prometheus: 
 
--count by (namespace) (kube_deployment_created{namespace=~"jagw|jalapeno"})
--sum by (namespace) (kube_pod_info{namespace=~"jagw|jalapeno"})
--count by (statefulset,namespace) (kube_statefulset_replicas{namespace=~"jagw|jalapeno"})
--(kube_deployment_status_replicas{namespace="jagw"}/kube_deployment_spec_replicas{namespace="jagw"})*100
--(kube_deployment_status_replicas{namespace="jalapeno"}/kube_deployment_spec_replicas{namespace="jalapeno"})*100
--kube_pod_status_ready{condition="true",namespace="jagw"}
--kube_pod_status_ready{condition="true",namespace="jalapeno"}
--kube_pod_status_ready{namespace=~"$Namespace",pod=~"$Pod"}
--sum by (pod) (rate(container_cpu_usage_seconds_total{job="kubernetes-cadvisor",namespace="jagw"}[1m]))
--sum by (pod) (rate(container_cpu_usage_seconds_total{job="kubernetes-cadvisor",namespace="jalapeno"}[1m]))
--container_memory_usage_bytes{job="kubernetes-cadvisor",namespace="jagw",container!=""}
--container_memory_usage_bytes{job="kubernetes-cadvisor",namespace="jalapeno",container!=""}
+- count by (namespace) (kube_deployment_created{namespace=~"jagw|jalapeno"})
+- sum by (namespace) (kube_pod_info{namespace=~"jagw|jalapeno"})
+- count by (statefulset,namespace) (kube_statefulset_replicas{namespace=~"jagw|jalapeno"})
+- (kube_deployment_status_replicas{namespace="jagw"}/kube_deployment_spec_replicas{namespace="jagw"})*100
+- (kube_deployment_status_replicas{namespace="jalapeno"}/kube_deployment_spec_replicas{namespace="jalapeno"})*100
+- kube_pod_status_ready{condition="true",namespace="jagw"}
+- kube_pod_status_ready{condition="true",namespace="jalapeno"}
+- kube_pod_status_ready{namespace=~"$Namespace",pod=~"$Pod"}
+- sum by (pod) (rate(container_cpu_usage_seconds_total{job="kubernetes-cadvisor",namespace="jagw"}[1m]))
+- sum by (pod) (rate(container_cpu_usage_seconds_total{job="kubernetes-cadvisor",namespace="jalapeno"}[1m]))
+- container_memory_usage_bytes{job="kubernetes-cadvisor",namespace="jagw",container!=""}
+- container_memory_usage_bytes{job="kubernetes-cadvisor",namespace="jalapeno",container!=""}
 
 you can find how to create expression on these web site: 
 - https://www.tigera.io/learn/guides/prometheus-monitoring/prometheus-metrics/
@@ -79,7 +79,7 @@ The graphs should look like this:
 
 Some graphs were created, you can download it here: 
 
-[graphs](<templates/grafana/Jalapeno Health Overview-1707213968809.json>)
+![graphs](<templates/grafana/Jalapeno Health Overview-1707213968809.json>)
 
 ## Arangodb
 
@@ -110,12 +110,11 @@ The name of the service of arangodb component was hard coded in the deployment o
 The image was updated by a new version 
 
 
-
 ## TO DO 
 
 List of storage fro grafana 
 Influx as a data source aytomotocs with prometheus 
-Modifier les version des helm chart et image (voir pour arrango , kafka , redis , influx, redis )
+Modify version of helm chart and image (see for arrango , kafka , redis , influx, redis )
 
 ## NOT DONE 
 
