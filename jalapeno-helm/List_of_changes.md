@@ -79,7 +79,7 @@ The graphs should look like this:
 
 Some graphs were created, you can download it here: 
 
-[click me to download](https://github.com/inesbenltaifa/jalapeno-helm/blob/main/jalapeno-helm/templates/grafana/Jalapeno%20Health%20Overview-1707213968809.json>)
+[click me to download](https://github.com/inesbenltaifa/jalapeno-helm/blob/main/jalapeno-helm/graph/>)
 
 ## Arangodb
 
