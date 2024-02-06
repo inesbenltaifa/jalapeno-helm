@@ -77,9 +77,11 @@ The graphs should look like this:
 ![grafana2](screenshots/image-7.png)
 ![garfana3](screenshots/image-8.png)
 
-Some graphs were created, you can download it here: 
+Some graphs were created, the json file is here: 
 
-[click me to download](https://github.com/inesbenltaifa/jalapeno-helm/blob/main/jalapeno-helm/graph/Jalapeno%20Health%20Overview-1707213968809.json)
+[graph](<graph/Jalapeno Health Overview-1707213968809.json>)
+
+You can import it to grafana.
 
 ## Arangodb
 
