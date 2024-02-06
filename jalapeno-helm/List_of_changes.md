@@ -79,7 +79,7 @@ The graphs should look like this:
 
 Some graphs were created, you can download it here: 
 
-
+[graphs](<templates/grafana/Jalapeno Health Overview-1707213968809.json>)
 
 ## Arangodb
 
